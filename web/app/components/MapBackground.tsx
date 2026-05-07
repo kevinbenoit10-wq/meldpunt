@@ -3,16 +3,26 @@
 import { useEffect, useRef } from 'react'
 
 const MARKERS: [number, number][] = [
+  // Links (figuur kant)
   [51.054, 3.717],   // Gent
   [51.209, 3.224],   // Brugge
   [50.828, 3.264],   // Kortrijk
-  [50.938, 4.038],   // Aalst
-  [51.162, 4.143],   // Sint-Niklaas
   [50.947, 3.123],   // Roeselare
-  [51.028, 4.100],   // Dendermonde
   [50.851, 2.882],   // Ieper
   [50.850, 3.609],   // Oudenaarde
   [50.882, 3.425],   // Waregem
+  // Rechts (tekst kant) — meer pins
+  [50.938, 4.038],   // Aalst
+  [51.162, 4.143],   // Sint-Niklaas
+  [51.028, 4.100],   // Dendermonde
+  [51.100, 4.320],   // Lokeren
+  [51.030, 3.980],   // Wetteren
+  [50.970, 4.200],   // Erpe-Mere
+  [51.200, 4.050],   // Hamme
+  [51.080, 4.280],   // Temse
+  [50.900, 3.900],   // Zottegem
+  [51.150, 3.980],   // Berlare
+  [50.860, 4.100],   // Geraardsbergen
 ]
 
 const PIN_SVG = `
