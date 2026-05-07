@@ -41,7 +41,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen relative flex flex-col items-center justify-center p-6">
+    <main className="min-h-screen flex flex-col items-center justify-center p-6">
       <div className="relative z-[2] w-full max-w-sm">
         <Link href="/" className="flex flex-col items-center gap-3 mb-8 group">
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform" style={{ background: 'linear-gradient(135deg, #7C3AED, #6D28D9)' }}>

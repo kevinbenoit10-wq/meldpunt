@@ -38,7 +38,7 @@ function StickFigure() {
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#0B0D1A] relative overflow-hidden flex flex-col">
+    <main className="min-h-screen relative flex flex-col">
 
       {/* Subtle purple glow behind figure */}
       <div
