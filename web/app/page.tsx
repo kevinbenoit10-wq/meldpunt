@@ -53,7 +53,7 @@ export default function Home() {
 
       {/* Header */}
       <header className="relative z-[2] px-8 py-5 flex justify-end">
-        <Link href="/login" className="text-sm font-semibold text-white border border-white/25 hover:border-white/60 hover:bg-white/10 px-4 py-2 rounded-lg transition-all">
+        <Link href="/login" className="text-sm font-semibold text-white px-4 py-2 rounded-lg transition-all hover:opacity-90" style={{ background: 'linear-gradient(135deg, #7C3AED, #6D28D9)' }}>
           Inloggen
         </Link>
       </header>
