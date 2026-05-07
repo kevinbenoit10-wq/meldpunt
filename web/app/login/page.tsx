@@ -4,10 +4,6 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
-
-const MapWrapper = dynamic(() => import('../components/MapWrapper'), { ssr: false })
-
 function BellIcon({ className }: { className?: string }) {
   return (
     <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -45,10 +41,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0B0D1A] relative flex flex-col items-center justify-center p-6">
-      <MapWrapper />
-      <div className="absolute inset-0 z-[1] pointer-events-none" style={{ background: 'rgba(11,13,26,0.55)' }} />
-
+    <main className="min-h-screen relative flex flex-col items-center justify-center p-6">
       <div className="relative z-[2] w-full max-w-sm">
         <Link href="/" className="flex flex-col items-center gap-3 mb-8 group">
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform" style={{ background: 'linear-gradient(135deg, #7C3AED, #6D28D9)' }}>

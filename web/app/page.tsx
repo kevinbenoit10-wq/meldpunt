@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import MapWrapper from './components/MapWrapper'
 import HomeHero from './components/HomeHero'
 
 
@@ -40,9 +39,6 @@ function StickFigure() {
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#0B0D1A] relative overflow-hidden flex flex-col">
-
-      {/* Real Leaflet map background */}
-      <MapWrapper />
 
       {/* Subtle purple glow behind figure */}
       <div
