@@ -48,16 +48,16 @@ body {
   50%       { transform: translateY(-6px); }
 }
 
-/* Left arm wave — origin at shoulder (right end of line bounding box = 100% 0%) */
+/* Right arm points up — origin at shoulder (left-bottom of bbox = 0% 100%) */
 .anim-arm-wave {
   animation: alertix-arm-wave 1.3s ease-in-out infinite;
   transform-box: fill-box;
-  transform-origin: 100% 0%;
+  transform-origin: 0% 100%;
 }
 
 @keyframes alertix-arm-wave {
   0%, 100% { transform: rotate(0deg); }
-  50%       { transform: rotate(-30deg); }
+  50%       { transform: rotate(-18deg); }
 }
 
 /* Left leg — origin at hip (right end of line bounding box = 100% 0%) */

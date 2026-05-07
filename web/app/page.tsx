@@ -18,11 +18,11 @@ function LocationPin({ className }: { className?: string }) {
 
 function StickFigure() {
   return (
-    <svg viewBox="0 0 120 170" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 120, height: 170 }}>
+    <svg viewBox="0 0 130 175" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 130, height: 175 }}>
       {/* Alert badge — bounces up/down */}
       <g className="anim-alert-bounce">
-        <circle cx="80" cy="22" r="13" fill="#EF4444" />
-        <text x="80" y="28" textAnchor="middle" fill="white" fontSize="17" fontWeight="bold" fontFamily="Arial, sans-serif">!</text>
+        <circle cx="82" cy="20" r="13" fill="#EF4444" />
+        <text x="82" y="26" textAnchor="middle" fill="white" fontSize="17" fontWeight="bold" fontFamily="Arial, sans-serif">!</text>
       </g>
 
       {/* Head */}
@@ -31,16 +31,19 @@ function StickFigure() {
       {/* Body */}
       <line x1="55" y1="72" x2="55" y2="114" stroke="white" strokeWidth="3" strokeLinecap="round" />
 
-      {/* Left arm — waves (origin = shoulder at right end of bbox → 100% 0%) */}
-      <line x1="55" y1="84" x2="18" y2="103" stroke="white" strokeWidth="3" strokeLinecap="round" className="anim-arm-wave" />
+      {/* Right arm — points up toward alert badge, waves */}
+      <line x1="55" y1="84" x2="82" y2="46" stroke="white" strokeWidth="3" strokeLinecap="round" className="anim-arm-wave" />
 
-      {/* Right arm — static */}
-      <line x1="55" y1="84" x2="88" y2="98" stroke="white" strokeWidth="3" strokeLinecap="round" />
+      {/* Left arm — holds phone */}
+      <line x1="55" y1="84" x2="22" y2="98" stroke="white" strokeWidth="3" strokeLinecap="round" />
+      {/* Phone in left hand */}
+      <rect x="10" y="93" width="13" height="20" rx="2" fill="white" opacity="0.9" />
+      <rect x="12" y="96" width="9" height="12" rx="1" fill="#7C3AED" opacity="0.8" />
 
-      {/* Left leg — spreads (hip = right end of bbox → 100% 0%) */}
+      {/* Left leg — spreads */}
       <line x1="55" y1="114" x2="32" y2="158" stroke="white" strokeWidth="3" strokeLinecap="round" className="anim-leg-left" />
 
-      {/* Right leg — spreads (hip = left end of bbox → 0% 0%) */}
+      {/* Right leg — spreads */}
       <line x1="55" y1="114" x2="78" y2="158" stroke="white" strokeWidth="3" strokeLinecap="round" className="anim-leg-right" />
     </svg>
   )
@@ -105,8 +108,6 @@ export default function Home() {
               >
                 <StickFigure />
               </div>
-              {/* Small device below circle */}
-              <div className="absolute -bottom-3 w-10 h-6 bg-blue-900/80 rounded border border-blue-600/40" />
             </div>
           </div>
 
