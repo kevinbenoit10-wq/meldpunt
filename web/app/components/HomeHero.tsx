@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 
@@ -19,6 +20,12 @@ function BellIcon({ className }: { className?: string }) {
   )
 }
 
+function fmt(n: number | null): string {
+  if (n === null) return '—'
+  if (n >= 1000) return `${(n / 1000).toFixed(1)}k+`
+  return `${n}+`
+}
+
 const stagger = {
   hidden: {},
   show: { transition: { staggerChildren: 0.1 } },
@@ -29,7 +36,15 @@ const item = {
   show:   { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] } },
 }
 
+type Stats = { totaal: number; opgelost: number; responsRate: number }
+
 export default function HomeHero() {
+  const [stats, setStats] = useState<Stats | null>(null)
+
+  useEffect(() => {
+    fetch('/api/stats').then(r => r.json()).then(setStats).catch(() => {})
+  }, [])
+
   return (
     <motion.div
       className="flex flex-col gap-6 bg-[#0B0D1A]/75 backdrop-blur-sm border border-white/10 rounded-2xl p-8"
@@ -87,16 +102,18 @@ export default function HomeHero() {
       <motion.div variants={item} className="border-t border-slate-800/80 pt-5">
         <div className="flex items-center gap-8">
           <div>
-            <p className="text-2xl font-black text-white">2.5k+</p>
+            <p className="text-2xl font-black text-white">{fmt(stats?.totaal ?? null)}</p>
             <p className="text-xs text-slate-500 mt-0.5">Meldingen ingediend</p>
           </div>
           <LocationPin className="text-violet-600 opacity-70 shrink-0" />
           <div>
-            <p className="text-2xl font-black text-white">1.8k+</p>
+            <p className="text-2xl font-black text-white">{fmt(stats?.opgelost ?? null)}</p>
             <p className="text-xs text-slate-500 mt-0.5">Problemen opgelost</p>
           </div>
           <div>
-            <p className="text-2xl font-black text-white">98%</p>
+            <p className="text-2xl font-black text-white">
+              {stats ? `${stats.responsRate}%` : '—'}
+            </p>
             <p className="text-xs text-slate-500 mt-0.5">Responstijd</p>
           </div>
         </div>
