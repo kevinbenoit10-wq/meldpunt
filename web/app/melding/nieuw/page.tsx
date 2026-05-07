@@ -53,11 +53,7 @@ export default function NieuweMeldingPage() {
     setLoading(true)
 
     const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-      router.push('/login')
-      return
-    }
+    if (!user) { router.replace('/login'); return }
 
     const { error } = await supabase.from('meldingen').insert({
       gebruiker_id: user.id,
