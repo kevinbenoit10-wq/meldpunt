@@ -1,7 +1,5 @@
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
-
-const MapBackground = dynamic(() => import('./components/MapBackground'), { ssr: false })
+import MapWrapper from './components/MapWrapper'
 
 function BellIcon({ className }: { className?: string }) {
   return (
@@ -58,7 +56,7 @@ export default function Home() {
     <main className="min-h-screen bg-[#0B0D1A] relative overflow-hidden flex flex-col">
 
       {/* Real Leaflet map background */}
-      <MapBackground />
+      <MapWrapper />
 
       {/* Subtle purple glow behind figure */}
       <div
