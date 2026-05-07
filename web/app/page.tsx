@@ -8,110 +8,175 @@ function BellIcon({ className }: { className?: string }) {
   )
 }
 
-const FEATURES = [
-  {
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-      </svg>
-    ),
-    title: 'Snel melden',
-    desc: 'Dien een melding in binnen de minuut, rechtstreeks via je browser.',
-  },
-  {
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-      </svg>
-    ),
-    title: 'Statusopvolging',
-    desc: 'Volg de voortgang van elke melding in je persoonlijk dashboard.',
-  },
-  {
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-    ),
-    title: 'Per gemeente',
-    desc: 'Elke melding komt automatisch bij de juiste gemeentedienst terecht.',
-  },
+function LocationPin({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="14" height="18" viewBox="0 0 14 18" fill="currentColor">
+      <path d="M7 0C3.13 0 0 3.13 0 7c0 5.25 7 11 7 11S14 12.25 14 7c0-3.87-3.13-7-7-7zm0 9.5C5.62 9.5 4.5 8.38 4.5 7S5.62 4.5 7 4.5 9.5 5.62 9.5 7 8.38 9.5 7 9.5z" />
+    </svg>
+  )
+}
+
+function StickFigure() {
+  return (
+    <svg viewBox="0 0 120 170" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 120, height: 170 }}>
+      {/* Alert badge — bounces up/down */}
+      <g className="anim-alert-bounce">
+        <circle cx="80" cy="22" r="13" fill="#EF4444" />
+        <text x="80" y="28" textAnchor="middle" fill="white" fontSize="17" fontWeight="bold" fontFamily="Arial, sans-serif">!</text>
+      </g>
+
+      {/* Head */}
+      <circle cx="55" cy="54" r="18" fill="white" />
+
+      {/* Body */}
+      <line x1="55" y1="72" x2="55" y2="114" stroke="white" strokeWidth="3" strokeLinecap="round" />
+
+      {/* Left arm — waves (origin = shoulder at right end of bbox → 100% 0%) */}
+      <line x1="55" y1="84" x2="18" y2="103" stroke="white" strokeWidth="3" strokeLinecap="round" className="anim-arm-wave" />
+
+      {/* Right arm — static */}
+      <line x1="55" y1="84" x2="88" y2="98" stroke="white" strokeWidth="3" strokeLinecap="round" />
+
+      {/* Left leg — spreads (hip = right end of bbox → 100% 0%) */}
+      <line x1="55" y1="114" x2="32" y2="158" stroke="white" strokeWidth="3" strokeLinecap="round" className="anim-leg-left" />
+
+      {/* Right leg — spreads (hip = left end of bbox → 0% 0%) */}
+      <line x1="55" y1="114" x2="78" y2="158" stroke="white" strokeWidth="3" strokeLinecap="round" className="anim-leg-right" />
+    </svg>
+  )
+}
+
+const PIN_POSITIONS: { top: string; left: string }[] = [
+  { top: '7%',  left: '11%' },
+  { top: '14%', left: '66%' },
+  { top: '10%', left: '80%' },
+  { top: '35%', left: '87%' },
+  { top: '51%', left: '76%' },
+  { top: '62%', left: '40%' },
+  { top: '65%', left: '58%' },
+  { top: '77%', left: '44%' },
+  { top: '80%', left: '75%' },
+  { top: '89%', left: '6%'  },
 ]
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white flex flex-col">
-      <header className="px-6 py-4 flex items-center justify-between border-b border-slate-100 sticky top-0 bg-white/95 backdrop-blur-sm z-10">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shadow-sm">
-            <BellIcon className="w-5 h-5 text-white" />
-          </div>
-          <span className="font-bold text-slate-900 text-lg tracking-tight">Alertix</span>
+    <main className="min-h-screen bg-[#0B0D1A] relative overflow-hidden flex flex-col">
+
+      {/* Grid overlay */}
+      <div className="alertix-grid-bg absolute inset-0 pointer-events-none" />
+
+      {/* Scattered location pins */}
+      {PIN_POSITIONS.map((pos, i) => (
+        <div key={i} className="absolute text-violet-700 opacity-50 pointer-events-none" style={pos}>
+          <LocationPin />
         </div>
-        <Link
-          href="/login"
-          className="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors"
-        >
+      ))}
+
+      {/* Subtle purple glow behind figure */}
+      <div
+        className="absolute pointer-events-none rounded-full"
+        style={{
+          top: '50%', left: '28%',
+          transform: 'translate(-50%, -50%)',
+          width: 420, height: 420,
+          background: 'radial-gradient(circle, rgba(109,40,217,0.18) 0%, transparent 70%)',
+        }}
+      />
+
+      {/* Header */}
+      <header className="relative z-10 px-8 py-5 flex justify-end">
+        <Link href="/login" className="text-sm text-slate-400 hover:text-white transition-colors">
           Inloggen
         </Link>
       </header>
 
-      <section className="flex-1 flex flex-col items-center justify-center px-6 py-20 bg-gradient-to-b from-slate-50 to-white">
-        <div className="max-w-2xl w-full text-center">
-          <span className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 text-xs font-semibold px-3.5 py-1.5 rounded-full mb-8 border border-blue-100">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 inline-block" />
-            Oost- &amp; West-Vlaanderen
-          </span>
-          <h1 className="text-5xl sm:text-6xl font-extrabold text-slate-900 mb-5 leading-[1.1] tracking-tight">
-            Meld een probleem<br className="hidden sm:block" />
-            <span className="text-blue-600"> in jouw buurt</span>
-          </h1>
-          <p className="text-slate-500 text-lg sm:text-xl mb-10 max-w-lg mx-auto leading-relaxed">
-            Snel, eenvoudig en rechtstreeks bij jouw gemeente. Volg de status van je melding op de voet.
-          </p>
+      {/* Main content */}
+      <div className="relative z-10 flex-1 flex items-center justify-center px-6 py-8">
+        <div className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link
-              href="/melding/nieuw"
-              className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white py-3.5 px-8 rounded-xl font-semibold text-base hover:bg-blue-700 active:bg-blue-800 transition-colors shadow-sm shadow-blue-200"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
-              </svg>
-              Nieuwe melding
-            </Link>
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center justify-center gap-2 bg-white text-slate-700 py-3.5 px-8 rounded-xl font-semibold text-base border border-slate-200 hover:bg-slate-50 active:bg-slate-100 transition-colors"
-            >
-              Mijn meldingen
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-6 py-16 border-t border-slate-100">
-        <div className="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8">
-          {FEATURES.map((f) => (
-            <div key={f.title} className="flex flex-col items-center text-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-                {f.icon}
+          {/* Left: animated stick figure */}
+          <div className="flex items-center justify-center">
+            <div className="relative flex flex-col items-center">
+              {/* Pulsing circle */}
+              <div
+                className="anim-pulse-ring rounded-full border-2 border-violet-700/50 flex items-center justify-center"
+                style={{ width: 260, height: 260 }}
+              >
+                <StickFigure />
               </div>
-              <div>
-                <p className="font-semibold text-slate-900 text-sm">{f.title}</p>
-                <p className="text-slate-400 text-sm mt-1 leading-relaxed">{f.desc}</p>
+              {/* Small device below circle */}
+              <div className="absolute -bottom-3 w-10 h-6 bg-blue-900/80 rounded border border-blue-600/40" />
+            </div>
+          </div>
+
+          {/* Right: content */}
+          <div className="flex flex-col gap-6">
+
+            {/* Logo */}
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg" style={{ background: 'linear-gradient(135deg, #7C3AED, #6D28D9)' }}>
+                <BellIcon className="w-6 h-6 text-white" />
+              </div>
+              <span className="text-white font-bold text-2xl tracking-tight">Alertix</span>
+            </div>
+
+            {/* Heading */}
+            <h1 className="text-4xl sm:text-5xl font-black text-white leading-[1.1] tracking-tight">
+              Meld problemen.<br />
+              Maak het verschil.
+            </h1>
+
+            {/* Description */}
+            <p className="text-slate-400 text-base leading-relaxed">
+              Zie je iets mis in jouw buurt? Meld het direct bij je gemeente.
+              Van putten in de weg tot kapotte verlichting — jouw meldingen houden de buurt veilig.
+            </p>
+
+            {/* CTA buttons */}
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/melding/nieuw"
+                className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 active:bg-red-800 text-white px-6 py-3 rounded-lg font-semibold text-sm transition-colors"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                Melding doen
+              </Link>
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-2 border border-slate-600 hover:border-slate-400 text-white px-6 py-3 rounded-lg font-semibold text-sm transition-colors"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                Meldingen bekijken
+              </Link>
+            </div>
+
+            {/* Divider + stats */}
+            <div className="border-t border-slate-800/80 pt-5">
+              <div className="flex items-center gap-8">
+                <div>
+                  <p className="text-2xl font-black text-white">2.5k+</p>
+                  <p className="text-xs text-slate-500 mt-0.5">Meldingen ingediend</p>
+                </div>
+                <LocationPin className="text-violet-600 opacity-70 shrink-0" />
+                <div>
+                  <p className="text-2xl font-black text-white">1.8k+</p>
+                  <p className="text-xs text-slate-500 mt-0.5">Problemen opgelost</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-black text-white">98%</p>
+                  <p className="text-xs text-slate-500 mt-0.5">Responstijd</p>
+                </div>
               </div>
             </div>
-          ))}
-        </div>
-      </section>
 
-      <footer className="px-6 py-6 border-t border-slate-100 text-center">
-        <p className="text-xs text-slate-400">
-          © {new Date().getFullYear()} Alertix — Meldplatform Oost- &amp; West-Vlaanderen
-        </p>
-      </footer>
+          </div>
+        </div>
+      </div>
     </main>
   )
 }
