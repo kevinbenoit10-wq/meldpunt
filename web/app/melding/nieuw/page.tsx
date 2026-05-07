@@ -14,10 +14,35 @@ const CATEGORIEEN = [
   'Andere',
 ]
 
+const GEMEENTES = [
+  // Oost-Vlaanderen
+  'Aalst', 'Aalter', 'Assenede', 'Berlare', 'Beveren', 'Brakel', 'Buggenhout',
+  'De Pinte', 'Deinze', 'Denderleeuw', 'Dendermonde', 'Destelbergen', 'Eeklo',
+  'Erpe-Mere', 'Evergem', 'Gavere', 'Gent', 'Geraardsbergen', 'Hamme', 'Herzele',
+  'Horebeke', 'Kaprijke', 'Kluisbergen', 'Kruibeke', 'Kruisem', 'Laarne',
+  'Lebbeke', 'Lede', 'Lierde', 'Lievegem', 'Lochristi', 'Lokeren', 'Maarkedal',
+  'Maldegem', 'Merelbeke', 'Moerbeke', 'Ninove', 'Oosterzele', 'Oudenaarde',
+  'Ronse', 'Sint-Laureins', 'Sint-Lievens-Houtem', 'Sint-Martens-Latem',
+  'Sint-Niklaas', 'Stekene', 'Temse', 'Wachtebeke', 'Wetteren', 'Wichelen',
+  'Wortegem-Petegem', 'Zele', 'Zottegem', 'Zulte', 'Zwalm',
+  // West-Vlaanderen
+  'Anzegem', 'Ardooie', 'Avelgem', 'Beernem', 'Blankenberge', 'Brugge', 'Damme',
+  'De Haan', 'De Panne', 'Deerlijk', 'Dentergem', 'Diksmuide', 'Gistel',
+  'Harelbeke', 'Heuvelland', 'Hooglede', 'Ieper', 'Ingelmunster', 'Izegem',
+  'Jabbeke', 'Knokke-Heist', 'Koksijde', 'Kortemark', 'Kortrijk', 'Kuurne',
+  'Langemark-Poelkapelle', 'Ledegem', 'Lendelede', 'Lichtervelde', 'Lo-Reninge',
+  'Menen', 'Mesen', 'Middelkerke', 'Moorslede', 'Nieuwpoort', 'Oostende',
+  'Oostkamp', 'Oostrozebeke', 'Oudenburg', 'Pittem', 'Poperinge', 'Roeselare',
+  'Ruiselede', 'Spiere-Helkijn', 'Staden', 'Tielt', 'Torhout', 'Veurne',
+  'Vleteren', 'Waregem', 'Wervik', 'Wevelgem', 'Wielsbeke', 'Wingene',
+  'Zedelgem', 'Zonnebeke', 'Zuienkerke', 'Zwevegem',
+].sort()
+
 export default function NieuweMeldingPage() {
   const [categorie, setCategorie] = useState('')
+  const [gemeente, setGemeente] = useState('')
+  const [straat, setStraat] = useState('')
   const [beschrijving, setBeschrijving] = useState('')
-  const [locatie, setLocatie] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
@@ -38,8 +63,9 @@ export default function NieuweMeldingPage() {
     const { error } = await supabase.from('meldingen').insert({
       gebruiker_id: user.id,
       categorie,
+      gemeente,
+      straat,
       beschrijving,
-      locatie,
       status: 'nieuw',
     })
 
@@ -77,13 +103,28 @@ export default function NieuweMeldingPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Locatie</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Gemeente</label>
+            <select
+              value={gemeente}
+              onChange={(e) => setGemeente(e.target.value)}
+              required
+              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Kies een gemeente</option>
+              {GEMEENTES.map((g) => (
+                <option key={g} value={g}>{g}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Straat & huisnummer</label>
             <input
               type="text"
-              value={locatie}
-              onChange={(e) => setLocatie(e.target.value)}
+              value={straat}
+              onChange={(e) => setStraat(e.target.value)}
               required
-              placeholder="bv. Gentstraat 12, Gent"
+              placeholder="bv. Gentstraat 12"
               className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>

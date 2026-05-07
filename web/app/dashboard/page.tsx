@@ -15,7 +15,8 @@ type Melding = {
   id: string
   categorie: string
   beschrijving: string
-  locatie: string
+  gemeente: string
+  straat: string
   status: string
   created_at: string
 }
@@ -85,7 +86,7 @@ export default function DashboardPage() {
                   {m.status}
                 </span>
               </div>
-              <p className="text-sm text-gray-500 mb-1">{m.locatie}</p>
+              <p className="text-sm text-gray-500 mb-1">{m.straat}, {m.gemeente}</p>
               <p className="text-sm text-gray-600">{m.beschrijving}</p>
               <p className="text-xs text-gray-300 mt-2">
                 {new Date(m.created_at).toLocaleDateString('nl-BE')}
