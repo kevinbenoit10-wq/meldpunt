@@ -1,4 +1,7 @@
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
+
+const MapBackground = dynamic(() => import('./components/MapBackground'), { ssr: false })
 
 function BellIcon({ className }: { className?: string }) {
   return (
@@ -12,61 +15,6 @@ function LocationPin({ className }: { className?: string }) {
   return (
     <svg className={className} width="14" height="18" viewBox="0 0 14 18" fill="currentColor">
       <path d="M7 0C3.13 0 0 3.13 0 7c0 5.25 7 11 7 11S14 12.25 14 7c0-3.87-3.13-7-7-7zm0 9.5C5.62 9.5 4.5 8.38 4.5 7S5.62 4.5 7 4.5 9.5 5.62 9.5 7 8.38 9.5 7 9.5z" />
-    </svg>
-  )
-}
-
-function MapBackground() {
-  const major = 'rgba(109,40,217,0.15)'
-  const minor = 'rgba(109,40,217,0.08)'
-  const pins: [number, number][] = [
-    [160, 140], [430, 360], [720, 580], [990, 140],
-    [1270, 360], [160, 760], [850, 360], [560, 470],
-    [1130, 760], [720, 240], [280, 580], [1130, 470],
-  ]
-  return (
-    <svg
-      className="absolute inset-0 w-full h-full pointer-events-none"
-      viewBox="0 0 1440 900"
-      preserveAspectRatio="xMidYMid slice"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      {/* Major horizontal streets */}
-      <line x1="0" y1="140" x2="1440" y2="140" stroke={major} strokeWidth="2.5" />
-      <line x1="0" y1="360" x2="1440" y2="360" stroke={major} strokeWidth="2.5" />
-      <line x1="0" y1="580" x2="1440" y2="580" stroke={major} strokeWidth="2.5" />
-      <line x1="0" y1="760" x2="1440" y2="760" stroke={major} strokeWidth="2.5" />
-      {/* Major vertical streets */}
-      <line x1="160" y1="0" x2="160" y2="900" stroke={major} strokeWidth="2.5" />
-      <line x1="430" y1="0" x2="430" y2="900" stroke={major} strokeWidth="2.5" />
-      <line x1="720" y1="0" x2="720" y2="900" stroke={major} strokeWidth="2.5" />
-      <line x1="990" y1="0" x2="990" y2="900" stroke={major} strokeWidth="2.5" />
-      <line x1="1270" y1="0" x2="1270" y2="900" stroke={major} strokeWidth="2.5" />
-      {/* Minor horizontal streets */}
-      <line x1="0" y1="240" x2="720" y2="240" stroke={minor} strokeWidth="1.5" />
-      <line x1="430" y1="470" x2="1440" y2="470" stroke={minor} strokeWidth="1.5" />
-      <line x1="0" y1="670" x2="990" y2="670" stroke={minor} strokeWidth="1.5" />
-      <line x1="720" y1="860" x2="1440" y2="860" stroke={minor} strokeWidth="1.5" />
-      <line x1="0" y1="50" x2="430" y2="50" stroke={minor} strokeWidth="1.5" />
-      {/* Minor vertical streets */}
-      <line x1="280" y1="0" x2="280" y2="580" stroke={minor} strokeWidth="1.5" />
-      <line x1="560" y1="140" x2="560" y2="760" stroke={minor} strokeWidth="1.5" />
-      <line x1="850" y1="360" x2="850" y2="900" stroke={minor} strokeWidth="1.5" />
-      <line x1="1130" y1="0" x2="1130" y2="580" stroke={minor} strokeWidth="1.5" />
-      <line x1="1130" y1="760" x2="1130" y2="900" stroke={minor} strokeWidth="1.5" />
-      <line x1="70" y1="140" x2="70" y2="760" stroke={minor} strokeWidth="1.5" />
-      {/* Diagonal streets */}
-      <line x1="160" y1="360" x2="430" y2="580" stroke={minor} strokeWidth="1.5" />
-      <line x1="720" y1="140" x2="990" y2="360" stroke={minor} strokeWidth="1.5" />
-      <line x1="990" y1="580" x2="1270" y2="760" stroke={minor} strokeWidth="1.5" />
-      <line x1="430" y1="760" x2="720" y2="900" stroke={minor} strokeWidth="1.5" />
-      <line x1="280" y1="140" x2="430" y2="240" stroke={minor} strokeWidth="1.5" />
-      {/* Location pins at intersections */}
-      {pins.map(([x, y], i) => (
-        <g key={i} transform={`translate(${x - 6}, ${y - 16})`} opacity="0.5" fill="#7C3AED">
-          <path d="M6 0C2.69 0 0 2.69 0 6c0 4.5 6 10 6 10S12 10.5 12 6c0-3.31-2.69-6-6-6zm0 8.5C4.07 8.5 2.5 6.93 2.5 5S4.07 1.5 6 1.5 9.5 3.07 9.5 5 7.93 8.5 6 8.5z" />
-        </g>
-      ))}
     </svg>
   )
 }
@@ -109,7 +57,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#0B0D1A] relative overflow-hidden flex flex-col">
 
-      {/* SVG map background */}
+      {/* Real Leaflet map background */}
       <MapBackground />
 
       {/* Subtle purple glow behind figure */}
@@ -124,14 +72,14 @@ export default function Home() {
       />
 
       {/* Header */}
-      <header className="relative z-10 px-8 py-5 flex justify-end">
+      <header className="relative z-[2] px-8 py-5 flex justify-end">
         <Link href="/login" className="text-sm text-slate-400 hover:text-white transition-colors">
           Inloggen
         </Link>
       </header>
 
       {/* Main content */}
-      <div className="relative z-10 flex-1 flex items-center justify-center px-6 py-8">
+      <div className="relative z-[2] flex-1 flex items-center justify-center px-6 py-8">
         <div className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
           {/* Left: animated stick figure */}
