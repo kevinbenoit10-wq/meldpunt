@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import MapWrapper from './components/MapWrapper'
 import HomeHero from './components/HomeHero'
 
