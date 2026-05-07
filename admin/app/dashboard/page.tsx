@@ -7,10 +7,16 @@ import { useRouter } from 'next/navigation'
 const STATUSSEN = ['nieuw', 'in behandeling', 'opgelost'] as const
 type Status = typeof STATUSSEN[number]
 
-const STATUS_KLEUREN: Record<Status, string> = {
-  'nieuw': 'bg-yellow-100 text-yellow-700',
-  'in behandeling': 'bg-blue-100 text-blue-700',
-  'opgelost': 'bg-green-100 text-green-700',
+const STATUS_STIJL: Record<Status, string> = {
+  'nieuw': 'bg-yellow-900/30 text-yellow-400 border border-yellow-800',
+  'in behandeling': 'bg-blue-900/30 text-blue-400 border border-blue-800',
+  'opgelost': 'bg-green-900/30 text-green-400 border border-green-800',
+}
+
+const STATUS_DOT: Record<Status, string> = {
+  'nieuw': 'bg-yellow-400',
+  'in behandeling': 'bg-blue-400',
+  'opgelost': 'bg-green-400',
 }
 
 type Melding = {
@@ -77,55 +83,91 @@ export default function AdminDashboard() {
   }
 
   const gefilterd = filter === 'alle' ? meldingen : meldingen.filter((m) => m.status === filter)
+  const counts = {
+    alle: meldingen.length,
+    nieuw: meldingen.filter(m => m.status === 'nieuw').length,
+    'in behandeling': meldingen.filter(m => m.status === 'in behandeling').length,
+    opgelost: meldingen.filter(m => m.status === 'opgelost').length,
+  }
 
   return (
-    <main className="min-h-screen bg-gray-50">
-      <header className="bg-gray-900 text-white px-6 py-4 flex justify-between items-center">
-        <div>
-          <h1 className="font-bold text-lg">Alertix Beheer</h1>
-          <p className="text-gray-400 text-sm">{gemeente}</p>
+    <main className="min-h-screen bg-gray-950">
+      <header className="bg-gray-900 border-b border-gray-800 px-6 py-4">
+        <div className="max-w-4xl mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
+              <span className="text-white font-bold text-sm">A</span>
+            </div>
+            <div>
+              <span className="font-bold text-white">Alertix</span>
+              <span className="text-gray-500 text-xs ml-2">Beheer</span>
+              {gemeente && (
+                <span className="ml-2 bg-gray-800 text-gray-300 text-xs px-2 py-0.5 rounded-full border border-gray-700">
+                  {gemeente}
+                </span>
+              )}
+            </div>
+          </div>
+          <button onClick={uitloggen} className="text-sm text-gray-500 hover:text-white transition">
+            Uitloggen
+          </button>
         </div>
-        <button onClick={uitloggen} className="text-sm text-gray-400 hover:text-white transition">
-          Uitloggen
-        </button>
       </header>
 
-      <div className="max-w-4xl mx-auto p-6">
-        <div className="flex gap-2 mb-6 flex-wrap">
-          {(['alle', ...STATUSSEN] as const).map((s) => (
+      <div className="max-w-4xl mx-auto px-6 py-8">
+        <div className="grid grid-cols-4 gap-3 mb-8">
+          {[
+            { key: 'alle', label: 'Alle', count: counts.alle },
+            { key: 'nieuw', label: 'Nieuw', count: counts.nieuw },
+            { key: 'in behandeling', label: 'In behandeling', count: counts['in behandeling'] },
+            { key: 'opgelost', label: 'Opgelost', count: counts.opgelost },
+          ].map((item) => (
             <button
-              key={s}
-              onClick={() => setFilter(s)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium transition ${
-                filter === s
-                  ? 'bg-gray-900 text-white'
-                  : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-100'
+              key={item.key}
+              onClick={() => setFilter(item.key as Status | 'alle')}
+              className={`rounded-xl p-4 text-left transition border ${
+                filter === item.key
+                  ? 'bg-blue-600 border-blue-500 shadow-lg shadow-blue-500/20'
+                  : 'bg-gray-900 border-gray-800 hover:border-gray-700'
               }`}
             >
-              {s === 'alle' ? `Alle (${meldingen.length})` : `${s} (${meldingen.filter(m => m.status === s).length})`}
+              <p className={`text-2xl font-bold ${filter === item.key ? 'text-white' : 'text-gray-300'}`}>
+                {item.count}
+              </p>
+              <p className={`text-xs mt-1 ${filter === item.key ? 'text-blue-100' : 'text-gray-500'}`}>
+                {item.label}
+              </p>
             </button>
           ))}
         </div>
 
-        {loading && <p className="text-gray-400 text-center py-8">Laden...</p>}
-        {!loading && gefilterd.length === 0 && (
-          <p className="text-gray-400 text-center py-8">Geen meldingen</p>
+        {loading && (
+          <div className="flex items-center justify-center py-16">
+            <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          </div>
         )}
 
-        <div className="flex flex-col gap-4">
+        {!loading && gefilterd.length === 0 && (
+          <div className="bg-gray-900 rounded-2xl border border-gray-800 p-12 text-center">
+            <p className="text-gray-500">Geen meldingen in deze categorie</p>
+          </div>
+        )}
+
+        <div className="flex flex-col gap-3">
           {gefilterd.map((m) => (
-            <div key={m.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+            <div key={m.id} className="bg-gray-900 rounded-xl border border-gray-800 p-5 hover:border-gray-700 transition">
               <div className="flex justify-between items-start mb-3">
                 <div>
-                  <span className="font-semibold text-gray-900">{m.categorie}</span>
-                  <p className="text-sm text-gray-400">{m.straat}, {m.gemeente}</p>
+                  <span className="font-semibold text-white">{m.categorie}</span>
+                  <p className="text-sm text-gray-500 mt-0.5">{m.straat}, {m.gemeente}</p>
                 </div>
-                <span className={`text-xs px-2 py-1 rounded-full font-medium ${STATUS_KLEUREN[m.status]}`}>
+                <span className={`flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full font-medium ${STATUS_STIJL[m.status]}`}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${STATUS_DOT[m.status]}`} />
                   {m.status}
                 </span>
               </div>
 
-              <p className="text-sm text-gray-600 mb-4">{m.beschrijving}</p>
+              <p className="text-sm text-gray-400 leading-relaxed mb-4">{m.beschrijving}</p>
 
               <div className="flex gap-2 flex-wrap">
                 {STATUSSEN.map((s) => (
@@ -133,10 +175,10 @@ export default function AdminDashboard() {
                     key={s}
                     onClick={() => updateStatus(m.id, s)}
                     disabled={m.status === s}
-                    className={`px-3 py-1 rounded-lg text-xs font-medium transition ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
                       m.status === s
-                        ? 'bg-gray-100 text-gray-300 cursor-default'
-                        : 'bg-gray-900 text-white hover:bg-gray-700'
+                        ? 'bg-gray-800 text-gray-600 cursor-default'
+                        : 'bg-gray-800 text-gray-300 hover:bg-blue-600 hover:text-white border border-gray-700'
                     }`}
                   >
                     {s}
@@ -144,7 +186,7 @@ export default function AdminDashboard() {
                 ))}
               </div>
 
-              <p className="text-xs text-gray-300 mt-3">
+              <p className="text-xs text-gray-700 mt-3">
                 {new Date(m.created_at).toLocaleDateString('nl-BE', {
                   day: 'numeric', month: 'long', year: 'numeric'
                 })}
