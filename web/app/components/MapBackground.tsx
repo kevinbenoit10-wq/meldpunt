@@ -87,7 +87,7 @@ export default function MapBackground() {
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       />
-      <div ref={containerRef} className="absolute inset-0 z-0" />
+      <div ref={containerRef} className="absolute inset-0" />
       {/* Dark overlay to blend with page color */}
       <div className="absolute inset-0 z-[1] pointer-events-none" style={{ background: 'rgba(11,13,26,0.55)' }} />
     </>

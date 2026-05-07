@@ -25,11 +25,13 @@ export default function RootLayout({
     <html lang="nl" className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
       <body className="min-h-screen bg-[#0B0D1A] relative">
         {/* Persistente kaartachtergrond — hermonteert nooit */}
-        <MapWrapper />
-        <div
-          className="fixed inset-0 z-[1] pointer-events-none"
-          style={{ background: 'rgba(11,13,26,0.55)' }}
-        />
+        <div className="fixed inset-0 z-0">
+          <MapWrapper />
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: 'rgba(11,13,26,0.55)' }}
+          />
+        </div>
         {/* Pagina-inhoud */}
         <div className="relative z-[2]">
           {children}
