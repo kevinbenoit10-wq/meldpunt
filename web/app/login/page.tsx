@@ -4,6 +4,9 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
+
+const MapWrapper = dynamic(() => import('../components/MapWrapper'), { ssr: false })
 
 function BellIcon({ className }: { className?: string }) {
   return (
@@ -42,20 +45,21 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">
-      <div className="w-full max-w-sm">
-        <div className="flex flex-col items-center mb-8">
-          <Link href="/" className="flex flex-col items-center gap-3 group">
-            <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200 group-hover:bg-blue-700 transition-colors">
-              <BellIcon className="w-7 h-7 text-white" />
-            </div>
-            <span className="font-bold text-slate-900 text-xl tracking-tight">Alertix</span>
-          </Link>
-        </div>
+    <main className="min-h-screen bg-[#0B0D1A] relative flex flex-col items-center justify-center p-6">
+      <MapWrapper />
+      <div className="absolute inset-0 z-[1] pointer-events-none" style={{ background: 'rgba(11,13,26,0.55)' }} />
 
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+      <div className="relative z-[2] w-full max-w-sm">
+        <Link href="/" className="flex flex-col items-center gap-3 mb-8 group">
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform" style={{ background: 'linear-gradient(135deg, #7C3AED, #6D28D9)' }}>
+            <BellIcon className="w-7 h-7 text-white" />
+          </div>
+          <span className="font-bold text-white text-xl tracking-tight">Alertix</span>
+        </Link>
+
+        <div className="bg-[#0B0D1A]/80 backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden">
           <div className="px-8 pt-7 pb-2">
-            <h1 className="text-xl font-bold text-slate-900">
+            <h1 className="text-xl font-bold text-white">
               {isRegister ? 'Account aanmaken' : 'Welkom terug'}
             </h1>
             <p className="text-slate-400 text-sm mt-1">
@@ -65,19 +69,19 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="px-8 py-6 flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-slate-700">E-mailadres</label>
+              <label className="text-sm font-medium text-slate-300">E-mailadres</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="jouw@email.be"
-                className="w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition"
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-slate-700">Wachtwoord</label>
+              <label className="text-sm font-medium text-slate-300">Wachtwoord</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -85,13 +89,13 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   placeholder="••••••••"
-                  className="w-full border border-slate-200 rounded-lg px-3.5 py-2.5 pr-10 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3.5 py-2.5 pr-10 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
                   tabIndex={-1}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
                 >
                   {showPassword ? (
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,18 +112,19 @@ export default function LoginPage() {
             </div>
 
             {error && (
-              <div className="bg-red-50 border border-red-100 rounded-lg px-3.5 py-2.5 flex items-start gap-2">
-                <svg className="w-4 h-4 text-red-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <div className="bg-red-500/10 border border-red-500/20 rounded-lg px-3.5 py-2.5 flex items-start gap-2">
+                <svg className="w-4 h-4 text-red-400 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                 </svg>
-                <p className="text-red-600 text-sm">{error}</p>
+                <p className="text-red-400 text-sm">{error}</p>
               </div>
             )}
 
             <button
               type="submit"
               disabled={loading}
-              className="bg-blue-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-blue-700 active:bg-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-1 shadow-sm shadow-blue-200"
+              className="flex items-center justify-center gap-2 py-2.5 rounded-lg font-semibold text-sm text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-1"
+              style={{ background: 'linear-gradient(135deg, #7C3AED, #6D28D9)' }}
             >
               {loading ? (
                 <>
@@ -133,12 +138,12 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="px-8 py-5 border-t border-slate-100 bg-slate-50 text-center">
-            <p className="text-sm text-slate-500">
+          <div className="px-8 py-5 border-t border-white/10 text-center">
+            <p className="text-sm text-slate-400">
               {isRegister ? 'Al een account?' : 'Nog geen account?'}{' '}
               <button
                 onClick={() => { setIsRegister(!isRegister); setError('') }}
-                className="text-blue-600 font-medium hover:underline"
+                className="text-violet-400 font-medium hover:text-violet-300 transition-colors"
               >
                 {isRegister ? 'Inloggen' : 'Gratis registreren'}
               </button>
@@ -146,7 +151,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <p className="text-center text-xs text-slate-400 mt-6">
+        <p className="text-center text-xs text-slate-600 mt-6">
           Veilige verbinding · 256-bit encryptie
         </p>
       </div>
